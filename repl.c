@@ -2,15 +2,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <signal.h>
 
 #ifdef USE_READLINE
 #include <readline/readline.h>
 #include <readline/history.h>
 #else
 static char *readline(const char *prompt) {
-    fprintf(stderr, "%s", prompt);
     char buf[1024];
-    char *line = fgets(buf, sizeof(buf), stdin);
+    char *line;
+    size_t len;
+    fprintf(stderr, "%s", prompt);
+    line = fgets(buf, sizeof(buf), stdin);
     if (line == NULL && feof(stdin)) {
         return NULL;
     } else if (line == NULL) {
@@ -18,7 +21,7 @@ static char *readline(const char *prompt) {
         return NULL;
     }
 
-    size_t len = strlen(line);
+    len = strlen(line);
 
     if (len < 1)
         return NULL;
@@ -67,6 +70,7 @@ static void repl() {
 }
 
 int main(int argc, char **argv) {
+    signal(SIGFPE, SIG_IGN);
     if (argc == 3 && strcmp(argv[1], "-e") == 0) {
         if (eval(argv[2]) == -1) {
             return 1;

@@ -35,7 +35,7 @@ extern "C" {
 
 typedef struct te_expr {
     int type;
-    union {double value; const double *bound; const void *function;};
+    union {double value; const double *bound; const void *function;} value;
     void *parameters[1];
 } te_expr;
 
@@ -60,6 +60,11 @@ typedef struct te_variable {
 } te_variable;
 
 
+#ifdef __riscos
+int te_isnan(double n);
+#else
+#define te_isnan(n) ((n) != (n))
+#endif
 
 /* Parses the input expression, evaluates it, and frees it. */
 /* Returns NaN on error. */
