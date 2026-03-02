@@ -23,15 +23,18 @@ riscos:
     - curl -s -L -o riscos-build-online https://github.com/gerph/robuild-client/releases/download/v0.07/riscos-build-online && chmod +x riscos-build-online
 
     # Zip up the source to send to robuild
-    - zip -q9r /tmp/source-archive.zip * .robuild.yaml
+    - |
+      cd RISCOS
+      zip -q9r /tmp/source-archive.zip * .robuild.yaml
+      cd ..
 
     # Send the archive file to build service
     - ./riscos-build-online -i /tmp/source-archive.zip -a off -t 300 -o /tmp/built
 
     # Rename the file we got
     - |
-      if [[ -f VersionNum ]] ; then
-          version=$(sed '/MajorVersion / ! d ; s/.*MajorVersion *"\(.*\)"/\1/' VersionNum)
+      if [[ -f RISCOS/VersionNum ]] ; then
+          version=$(sed '/MajorVersion / ! d ; s/.*MajorVersion *"\(.*\)"/\1/' RISCOS/VersionNum)
       else
           version=$(git rev-parse --short HEAD)
       fi
