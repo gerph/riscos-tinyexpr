@@ -1,12 +1,3 @@
----
-name: Bug report
-about: Something that's not right about the project
-title: ''
-labels: bug
-assignees: 'gerph'
-
----
-
 ## Problem statement
 
 <!-- Explain what you think is wrong -->
